@@ -26,7 +26,6 @@ button{display:block;margin:40px auto;padding:16px 32px;background:#2563eb;color
 </div>
 <div class="content">
 <label>שם המורה</label><input id="name">
-<label>מספר תעודת זהות</label><input id="idnum" type="text" inputmode="numeric">
 <label>תחום הוראה</label><input id="field">
 <div id="questions"></div>
 <button onclick="downloadDocx()">הורדת עבודת הסיכום למחשב</button>
@@ -82,11 +81,6 @@ for(let r=0;r<6;r++) children.push(new Paragraph({alignment:AlignmentType.CENTER
 children.push(new Paragraph({
     alignment:AlignmentType.CENTER,
     children:[new TextRun({text:"שם המורה: "+document.getElementById("name").value,bold:true,size:30,font:"Calibri",color:"1E3A8A"})]
-}));
-children.push(new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:" ",size:16})]}));
-children.push(new Paragraph({
-    alignment:AlignmentType.CENTER,
-    children:[new TextRun({text:"מספר תעודת זהות: "+document.getElementById("idnum").value,bold:true,size:28,font:"Calibri",color:"1E3A8A"})]
 }));
 children.push(new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:" ",size:16})]}));
 children.push(new Paragraph({
