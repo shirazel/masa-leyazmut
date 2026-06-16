@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>מסע לעבר היזמות</title>
-<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <style>
 body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#f8fbff,#eef7f1);margin:0;color:#2d3748}
@@ -57,17 +57,33 @@ async function downloadDocx(){
 const {Document,Packer,Paragraph,HeadingLevel,TextRun,AlignmentType}=docx;
 const children=[];
 
-children.push(new Paragraph({text:"מסע לעבר היזמות",heading:HeadingLevel.TITLE,alignment:AlignmentType.CENTER}));
-children.push(new Paragraph({text:"הובלת תהליך למידה יזמי",alignment:AlignmentType.CENTER}));
-children.push(new Paragraph({text:"שם המורה: "+document.getElementById("name").value}));
-children.push(new Paragraph({text:"תחום הוראה: "+document.getElementById("field").value}));
+children.push(new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children:[new TextRun({text:"מסע לעבר היזמות",bold:true,size:36,color:"2563EB",font:"Calibri"})]
+    }));
+children.push(new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children:[new TextRun({text:"הובלת תהליך למידה יזמי",italics:true,size:28,color:"0F766E",font:"Calibri"})]
+    }));
+children.push(new Paragraph({
+        children:[new TextRun({text:"שם המורה: "+document.getElementById("name").value,font:"Calibri",size:24})]
+    }));
+children.push(new Paragraph({
+        children:[new TextRun({text:"תחום הוראה: "+document.getElementById("field").value,font:"Calibri",size:24})]
+    }));
 
 let i=0;
 sections.forEach(s=>{
-children.push(new Paragraph({text:s[0],heading:HeadingLevel.HEADING_1}));
+children.push(new Paragraph({
+        children:[new TextRun({text:s[0],bold:true,color:"0F766E",size:28,font:"Calibri"})]
+    }));
 s[1].forEach(q=>{
-children.push(new Paragraph({children:[new TextRun({text:q,bold:true})]}));
-children.push(new Paragraph({text:document.getElementById("q"+i).value || " "}));
+children.push(new Paragraph({
+        children:[new TextRun({text:q,bold:true,font:"Calibri",size:24})]
+    }));
+children.push(new Paragraph({
+        children:[new TextRun({text:document.getElementById("q"+i).value || " ",font:"Calibri",size:22})]
+    }));
 i++;
 });
 });
