@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>מסע לעבר היזמות</title>
+<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<style>
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#f8fbff,#eef7f1);margin:0;color:#2d3748}
+.container{max-width:950px;margin:30px auto;background:white;border-radius:28px;box-shadow:0 10px 30px rgba(0,0,0,.12);overflow:hidden}
+.header{background:linear-gradient(135deg,#2563eb,#0f766e);color:white;padding:50px;text-align:center}
+.content{padding:40px}
+.section{background:#f8fafc;border-right:8px solid #0f766e;border-radius:18px;padding:25px;margin-top:25px}
+label{display:block;font-weight:bold;margin-top:15px;color:#1e3a8a}
+input,textarea{width:100%;box-sizing:border-box;padding:12px;border:2px solid #dbeafe;border-radius:12px;margin-top:8px}
+textarea{min-height:90px}
+button{display:block;margin:40px auto;padding:16px 32px;background:#2563eb;color:white;border:none;border-radius:14px;font-size:18px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>מסע לעבר היזמות</h1>
+<h2>הובלת תהליך למידה יזמי</h2>
+<h3>עבודת סיכום במסגרת ההשתלמות</h3>
+</div>
+<div class="content">
+<label>שם המורה</label><input id="name">
+<label>תחום הוראה</label><input id="field">
+<div id="questions"></div>
+<button onclick="downloadDocx()">הורדת עבודת הסיכום למחשב</button>
+</div></div>
+
+<script>
+const sections=[
+["תחנה ראשונה, נקודת המוצא",["מה היו הציפיות שלכן/ם בתחילת תהליך הלמידה היזמי?"]],
+["תחנה שנייה, הדרך",["אילו יוזמות ליוויתן/ם במהלך השנה?","מה היה תפקידכן/ם בהובלת התהליך?","אילו אתגרים ליוו אתכן/ם לאורך הדרך וכיצד התמודדתן/ם עמם?"]],
+["תחנה שלישית, צמיחה ולמידה",["מה למדתן/ם על תלמידותיכן/ם?","מה למדתן/ם על עצמכן/ם כאנשי ונשות חינוך?","אילו מיומנויות התפתחו אצלכן/ם?"]],
+["תחנה רביעית, כנס עשה טוב",["כיצד השפיע הכנס על התלמידים?","מה היה הרגע המשמעותי ביותר עבורכן/ם?"]],
+["תחנה חמישית, מתעדים את העשייה",["צרפו קישור אחד או יותר לפוסטרים או לתוצרים.","בחרו תוצר אחד והסבירו מדוע בחרתן/ם בו."]],
+["תחנה שישית, מבט קדימה",["אילו המלצות יש לכן/ם?","כיצד תרצו להמשיך לשלב יזמות?","הדבר המשמעותי ביותר שאני לוקח/ת איתי הוא:","מסר למורה שיצא/תצא למסע דומה:"]]
+];
+
+let html="";
+let idx=0;
+sections.forEach(s=>{
+html+=`<div class="section"><h3>${s[0]}</h3>`;
+s[1].forEach(q=>{
+html+=`<label>${q}</label><textarea id="q${idx}"></textarea>`;
+idx++;
+});
+html+="</div>";
+});
+document.getElementById("questions").innerHTML=html;
+
+async function downloadDocx(){
+const {Document,Packer,Paragraph,HeadingLevel,TextRun,AlignmentType}=docx;
+const children=[];
+
+children.push(new Paragraph({text:"מסע לעבר היזמות",heading:HeadingLevel.TITLE,alignment:AlignmentType.CENTER}));
+children.push(new Paragraph({text:"הובלת תהליך למידה יזמי",alignment:AlignmentType.CENTER}));
+children.push(new Paragraph({text:"שם המורה: "+document.getElementById("name").value}));
+children.push(new Paragraph({text:"תחום הוראה: "+document.getElementById("field").value}));
+
+let i=0;
+sections.forEach(s=>{
+children.push(new Paragraph({text:s[0],heading:HeadingLevel.HEADING_1}));
+s[1].forEach(q=>{
+children.push(new Paragraph({children:[new TextRun({text:q,bold:true})]}));
+children.push(new Paragraph({text:document.getElementById("q"+i).value || " "}));
+i++;
+});
+});
+
+const doc=new Document({sections:[{children}]});
+const blob=await Packer.toBlob(doc);
+saveAs(blob,"מסע_לעבר_היזמות.docx");
+}
+</script>
+</body>
+</html>
